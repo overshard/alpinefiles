@@ -23,7 +23,7 @@ good enough security and much better than nothing!
     apk update
     apk upgrade
     apk add \
-        nvim \
+        neovim \
         curl \
         git \
         htop \
