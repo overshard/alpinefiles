@@ -41,8 +41,9 @@ good enough security and much better than nothing!
     ufw allow 443/tcp
     ufw --force enable
 
-    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/periodic/daily/apk-autoupgrade | tee /etc/periodic/daily/apk-autoupgrade
-    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/periodic/daily/borg-autobackup | tee /etc/periodic/daily/borg-autobackup
-    chmod 700 /etc/periodic/daily/apk-autoupgrade && chmod 700 /etc/periodic/daily/borg-autobackup
+    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/periodic/daily/apk-autoupgrade \
+        | tee /etc/periodic/daily/apk-autoupgrade && chmod 700 /etc/periodic/daily/apk-autoupgrade
+    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/periodic/daily/borg-autobackup \
+        | tee /etc/periodic/daily/borg-autobackup && chmod 700 /etc/periodic/daily/borg-autobackup
 
     rc-update add docker boot && service docker start
