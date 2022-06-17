@@ -9,7 +9,7 @@ export BORG_REPO=/srv/backup
 info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
 trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
 
-info "Starting backup" > /var/log/borg-backup.log
+info "Starting backup"
 
 # Backup the most important directories into an archive named after
 # the machine this script is currently running on:
@@ -31,7 +31,7 @@ borg create                         \
 
 backup_exit=$?
 
-info "Pruning repository" > /var/log/borg-backup.log
+info "Pruning repository"
 
 # Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
 # archives of THIS machine.
@@ -47,7 +47,7 @@ prune_exit=$?
 
 # actually free repo disk space by compacting segments
 
-info "Compacting repository" > /var/log/borg-backup.log
+info "Compacting repository"
 
 borg compact
 
@@ -58,11 +58,12 @@ global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
 global_exit=$(( compact_exit > global_exit ? compact_exit : global_exit ))
 
 if [ ${global_exit} -eq 0 ]; then
-    info "Backup, Prune, and Compact finished successfully" > /var/log/borg-backup.log
+    info "Backup, Prune, and Compact finished successfully"
+    borg list /srv/backup/ | tail -n 1 >> /var/log/borg-autobackup.log
 elif [ ${global_exit} -eq 1 ]; then
-    info "Backup, Prune, and/or Compact finished with warnings" > /var/log/borg-backup.log
+    info "Backup, Prune, and/or Compact finished with warnings"
 else
-    info "Backup, Prune, and/or Compact finished with errors" > /var/log/borg-backup.log
+    info "Backup, Prune, and/or Compact finished with errors"
 fi
 
 exit ${global_exit}
