@@ -1,0 +1,68 @@
+#!/bin/sh
+# Based off of https://borgbackup.readthedocs.io/en/stable/quickstart.html#automating-backups
+# Init the repo with borg init -e none /srv/backup
+
+# Setting this, so the repo does not need to be given on the commandline:
+export BORG_REPO=/srv/backup
+
+# some helpers and error handling:
+info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
+trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
+
+info "Starting backup" > /var/log/borg-backup.log
+
+# Backup the most important directories into an archive named after
+# the machine this script is currently running on:
+
+borg create                         \
+    --verbose                       \
+    --filter AME                    \
+    --list                          \
+    --stats                         \
+    --show-rc                       \
+    --compression lz4               \
+    --exclude-caches                \
+                                    \
+    ::'{now}'                       \
+    /srv/git                        \
+    /srv/docker                     \
+    /srv/data                       \
+    /etc/caddy                      \
+
+backup_exit=$?
+
+info "Pruning repository" > /var/log/borg-backup.log
+
+# Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
+# archives of THIS machine.
+
+borg prune                          \
+    --list                          \
+    --show-rc                       \
+    --keep-daily    7               \
+    --keep-weekly   4               \
+    --keep-monthly  6               \
+
+prune_exit=$?
+
+# actually free repo disk space by compacting segments
+
+info "Compacting repository" > /var/log/borg-backup.log
+
+borg compact
+
+compact_exit=$?
+
+# use highest exit code as global exit code
+global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
+global_exit=$(( compact_exit > global_exit ? compact_exit : global_exit ))
+
+if [ ${global_exit} -eq 0 ]; then
+    info "Backup, Prune, and Compact finished successfully" > /var/log/borg-backup.log
+elif [ ${global_exit} -eq 1 ]; then
+    info "Backup, Prune, and/or Compact finished with warnings" > /var/log/borg-backup.log
+else
+    info "Backup, Prune, and/or Compact finished with errors" > /var/log/borg-backup.log
+fi
+
+exit ${global_exit}
