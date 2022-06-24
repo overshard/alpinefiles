@@ -44,7 +44,9 @@ good enough security and much better than nothing!
     curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/periodic/daily/borg-autobackup \
         | tee /etc/periodic/daily/borg-autobackup && chmod 700 /etc/periodic/daily/borg-autobackup
 
-    rc-update add docker boot && rc-service docker start
-    rc-update add caddy boot && rc-service caddy start
+    mkdir /srv/git && mkdir /srv/docker && mkdir /srv/data && mkdir /srv/backup
 
     borg init -e none /srv/backup
+
+    rc-update add docker boot && rc-service docker start
+    rc-update add caddy boot && rc-service caddy start
