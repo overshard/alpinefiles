@@ -1,4 +1,2 @@
 #!/bin/sh
-# I decided this was a good idea, it's probably not.
-
-apk upgrade --update | ts '[%Y-%m-%d %H:%M:%S]' >> /var/log/apk-autoupgrade.log
+apk upgrade --update | sed "s/^/[`date`] /" >> /var/log/apk-autoupgrade.log

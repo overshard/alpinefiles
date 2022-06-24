@@ -59,7 +59,6 @@ global_exit=$(( compact_exit > global_exit ? compact_exit : global_exit ))
 
 if [ ${global_exit} -eq 0 ]; then
     info "Backup, Prune, and Compact finished successfully"
-    borg list /srv/backup/ | tail -n 1 >> /var/log/borg-autobackup.log
 elif [ ${global_exit} -eq 1 ]; then
     info "Backup, Prune, and/or Compact finished with warnings"
 else

@@ -26,8 +26,6 @@ good enough security and much better than nothing!
         neovim \
         curl \
         git \
-        htop \
-        moreutils \
         ip6tables \
         iptables \
         ufw \
@@ -46,4 +44,7 @@ good enough security and much better than nothing!
     curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/periodic/daily/borg-autobackup \
         | tee /etc/periodic/daily/borg-autobackup && chmod 700 /etc/periodic/daily/borg-autobackup
 
-    rc-update add docker boot && service docker start
+    rc-update add docker boot && rc-service docker start
+    rc-update add caddy boot && rc-service caddy start
+
+    borg init -e none /srv/backup
