@@ -50,3 +50,6 @@ good enough security and much better than nothing!
 
     rc-update add docker boot && rc-service docker start
     rc-update add caddy boot && rc-service caddy start
+
+    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/root/server-health-check.sh \
+        | tee /root/server-health-check.sh && chmod 700 /root/server-health-check.sh
