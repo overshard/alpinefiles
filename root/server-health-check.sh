@@ -11,3 +11,6 @@ free -h | head -n2
 
 echo -e "\nfree space   ------------------------------------------------------------------"
 df -h | head -n1 && df -h | grep "/dev/sda" | head -n1
+
+echo -e "\ncontainer stats ---------------------------------------------------------------"
+docker ps -q | xargs docker stats --no-stream
