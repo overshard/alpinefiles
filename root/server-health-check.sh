@@ -4,6 +4,7 @@ echo -e "\napk upgrades --------------------------------------------------------
 tail /var/log/apk-autoupgrade.log
 
 echo -e "\nborg backups ------------------------------------------------------------------"
+borg info /srv/backup/ | tail -n5 | head -n3
 borg list /srv/backup
 
 echo -e "\nfree memory  ------------------------------------------------------------------"
