@@ -25,6 +25,7 @@ good enough security and much better than nothing!
     apk add \
         neovim \
         curl \
+        rsync \
         git \
         ip6tables \
         iptables \
