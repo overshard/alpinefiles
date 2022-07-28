@@ -20,41 +20,7 @@ I allow my local ISP's range because I have a DHCP lease from them and I get
 tired of logging into my server from my hosting provider's UI to update it. It's
 good enough security and much better than nothing!
 
-    apk update
-    apk upgrade
-    apk add \
-        neovim \
-        curl \
-        rsync \
-        git \
-        ip6tables \
-        iptables \
-        ufw \
-        borgbackup \
-        docker\
-        docker-compose \
-        caddy
+I don't recommend running this script without downloading and modifying it for
+your needs but you can if you want!
 
-    ufw allow from 192.230.176.0/20 proto tcp to any port 22
-    ufw allow 80/tcp
-    ufw allow 80/udp  # for http3
-    ufw allow 443/tcp
-    ufw allow 443/udp  # for http3
-    ufw --force enable
-
-    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/apk/repositories \
-        | tee /etc/apk/repositories && chmod 644 /etc/apk/repositories
-    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/periodic/daily/apk-autoupgrade \
-        | tee /etc/periodic/daily/apk-autoupgrade && chmod 700 /etc/periodic/daily/apk-autoupgrade
-    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/periodic/daily/borg-autobackup \
-        | tee /etc/periodic/daily/borg-autobackup && chmod 700 /etc/periodic/daily/borg-autobackup
-    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/root/server-health-check.sh \
-        | tee /root/server-health-check.sh && chmod 700 /root/server-health-check.sh
-
-    mkdir /srv/git && mkdir /srv/docker && mkdir /srv/data && mkdir /srv/backup
-
-    borg init -e none /srv/backup
-
-    rc-update add ufw boot && rc-service ufw start
-    rc-update add docker boot && rc-service docker start
-    rc-update add caddy boot && rc-service caddy start
+    curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/quickstart.sh | sh
