@@ -37,6 +37,8 @@ curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/peri
     | tee /etc/periodic/daily/apk-autoupgrade && chmod 700 /etc/periodic/daily/apk-autoupgrade
 curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/periodic/daily/borg-autobackup \
     | tee /etc/periodic/daily/borg-autobackup && chmod 700 /etc/periodic/daily/borg-autobackup
+curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/etc/docker/daemon.json \
+    | tee /etc/docker/daemon.json && chmod 644 /etc/apk/repositories
 curl -o- https://raw.githubusercontent.com/overshard/alpinefiles/master/root/server-health-check.sh \
     | tee /root/server-health-check.sh && chmod 700 /root/server-health-check.sh
 
